@@ -1,0 +1,5 @@
+(1) jmr@dirt:~$ ssh -R 24680:localhost:22 root@hadoop1
+(2) [root@hadoop1 ~]# ssh -p24680 -D12345 mcl@localhost
+(3) jmr@dirt:~$ screen socat tcp4-listen:5353,reuseaddr,fork UDP:8.8.8.8:53
+(4) jmr@dirt:~$ ssh -R 12346:localhost:5353 root@hadoop1
+(5) [root@hadoop1 ~]# screen socat -T15 udp4-recvfrom:53,reuseaddr,fork tcp:localhost:12346

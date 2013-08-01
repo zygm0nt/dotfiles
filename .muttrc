@@ -1,0 +1,97 @@
+set from = "email@addr"
+set realname = "Marcin Cylke"
+
+set imap_user = "username"
+set imap_pass = "pass"
+
+set folder = "imap://server"
+set spoolfile = "+INBOX"
+
+set header_cache =~/.mutt/cache/headers
+set message_cachedir =~/.mutt/cache/bodies
+set certificate_file =~/.mutt/certificates
+
+set smtp_url = "smtp://user@server:587/"
+set smtp_pass = "pass"
+
+set move = no  #Stop asking to "move read messages to mbox"!
+set imap_keepalive = 900
+
+set include
+set arrow_cursor
+set copy=yes
+set edit_headers
+set help
+set read_inc=25
+set reply_to
+set reverse_name
+
+# Header stuff
+ignore "Authentication-Results:"
+ignore "DomainKey-Signature:"
+ignore "DKIM-Signature:"
+hdr_order Date From To Cc
+
+ignore *
+unignore from: date subject to cc
+unignore x-mailing-list: posted-to:
+unignore x-mailer:
+
+# For better looks
+set markers=no # don't put '+' at the beginning of wrapped lines
+set pager_index_lines= 5 # how large is the index window?
+set sort = 'threads'
+set sort_aux = 'last-date-received'
+
+# Colors
+color header brightred default ^(From|Subject):
+color body magenta default "(ftp|http|https)://[^ ]+"	# point out URLs
+color body magenta default [-a-z_0-9.]+@[-a-z_0-9.]+	# e-mail addresses
+color underline brightgreen default
+
+color hdrdefault red default
+color quoted brightblue default
+color signature red default
+color indicator brightyellow red
+color error brightred default
+color status yellow blue
+color tree magenta default	# the thread tree in the index menu
+color tilde magenta default
+color message brightcyan default
+color markers brightcyan default
+color attachment brightmagenta default
+color search default green	# how to hilite search patterns in the pager
+
+mono quoted bold
+
+#Key bindings
+bind pager G bottom	# just like vi and less
+macro index \Cr "<tag-pattern>all<enter><tag-prefix><clear-flag>N<untag-pattern>all<enter>" "mark all as read"
+bind editor "\t" complete-query
+
+# My Editor
+set editor='vim + -c "set textwidth=72" -c "set wrap" -c "set nocp" -c "?^$"'
+set query_command="/home/mcl/.mutt/mutt-ldap.pl '%s'" # query LDAP address book
+set folder_format="%2C %t %N %F %2l %-8.8u %-8.8g %8s %d %f"
+set status_format=" %?M?%M/?%m Mails %?n?%n new, ?%?u?%u unread, ?%?p?%p drafts, ?%?t?%t +tagged, ?%?d?%d deleted, ?[%f %l]  %?b?%b unread messages. ?%>  %V   sort by: %s/%S  [%P]"
+
+
+# My Rolodeck :)
+set alias_file= ~/.mutt/aliases
+set sort_alias= alias
+set reverse_alias=yes
+source $alias_file
+
+set status_format="mutt_xtitle '%r %f (%L) [Msgs:%?M?%M/?%m%?n? New:%n?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?]'|"
+
+# Mailboxes to watch for new mail
+#	mailboxes <path1> [ <path2> ... ]
+
+mailboxes ! +touki
+
+# Automatically use entries from ~/.mailcap to view these MIME types
+#	auto_view <type> [ <type> ... ]
+auto_view application/x-gunzip
+auto_view application/x-gzip
+
+
