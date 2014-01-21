@@ -21,4 +21,4 @@
 	interactive = auto
 	status = auto
 [push]
-	default = matching
+	default = current

@@ -26,6 +26,8 @@ PROMPT='%B%m%~%b$(git_super_status) %# '
 alias ls='ls -F --color=auto'
 alias jpsx='sh ~/bin/jpsx.sh'
 
+fpath=(/home/mcl/.zsh/zsh-completions/src $fpath)
+
 LESS=-FRX ; export LESS
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
@@ -35,7 +37,7 @@ case $TERM in
              ;;
 esac
 
-export PATH=$PATH:~/tools/apache-maven-3.1.0/bin:~/tools/gradle-1.6/bin
+export PATH=$PATH:~/tools/apache-maven-3.1.0/bin:~/tools/gradle-1.6/bin:~/tools
 
 echo "" ; echo ""
 fortune -s | cowsay -n

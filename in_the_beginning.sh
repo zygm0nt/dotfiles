@@ -14,4 +14,3 @@ ssh-add ~/.ssh/id_dsa
 
 crt_valid_until=`openssl x509 -noout -text -in /etc/openvpn/vpn.pem | grep "Not After" | awk -F' : ' '{print $2}'`
 echo "VPN cert valid until $crt_valid_until"
-
