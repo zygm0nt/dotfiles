@@ -1,5 +1,5 @@
 [core]
-	excludesfile = /home/mcl/.gitignore
+	excludesfile = ~/.gitignore
 	editor = vim
 [alias]
 	st = status
@@ -12,13 +12,26 @@
     hist = log --pretty=format:'%Cred%h%Creset %C(bold blue)<%an>%Creset%C(yellow)%d%Creset %Cgreen(%cr)%Creset%n%w(80,8,8)%s' --graph
     histfull = log --pretty=format:'%Cred%h%Creset %C(bold blue)<%an>%Creset%C(yellow)%d%Creset %Cgreen(%cr)%Creset%n%w(80,8,8)%s%n' --graph --name-status
     llog = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=iso
+    
+    #via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
+    recent-branches = !git for-each-ref --count=5 --sort=-committerdate refs/heads/ --format='%(refname:short)'
+
 [user]
 	name = Marcin Cylke
-	email = mcl@touk.pl
+	email = marcin.cylke+github@gmail.com
 [color]
 	branch = auto
 	diff = auto
 	interactive = auto
 	status = auto
 [push]
-	default = current
+	default = tracking
+[rerere]
+    # Remember my merges
+    #   http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
+    enabled = true
+[diff]
+  # Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
+  # instead of a/b/c/d as prefixes for patches
+  mnemonicprefix = true
+
