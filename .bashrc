@@ -65,6 +65,10 @@ xterm*|rxvt*)
     ;;
 esac
 
+if [ -n "$DISPLAY" -a "$TERM" == "xterm" ]; then
+        export TERM=xterm-256color
+fi
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -100,3 +104,6 @@ fi
 
 export FIGNORE=.svn
 alias mvn2=~/sandbox/apache-maven-2.2.1/bin/mvn
+
+GIT_PROMPT_THEME=Single_line_Solarized
+source ~/.bash-git-prompt/gitprompt.sh
