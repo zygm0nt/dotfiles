@@ -17,7 +17,7 @@
     anychangesonmaster = !sh -c 'git fetch' && git log --oneline HEAD..origin/master
     whoischanging = !sh -c 'git shortlog HEAD..origin/$0'
     whoischangingmaster = !sh -c 'git shortlog HEAD..origin/master'
-    
+   
     #what branches you have on origin, with info on who is guilty and how long ago. Useful for gitflow and feature branches in general. Requires fetch up-front.
     showorigin = "!sh -c 'for branch in `git branch -r | grep -v HEAD`;do echo `git show -s --format=\"%Cred%ci %C(green)%h %C(yellow)%cr %C(magenta)%an %C(blue)\" $branch | head -n 1` \\\t$branch; done | sort -r'"
 
@@ -100,3 +100,6 @@
 [user]
 	name = Marcin Cylke
 	email = marcin.cylke+github@gmail.com
+
+[commit]
+    template = ~/.git_commit_msg.txt
