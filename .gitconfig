@@ -5,6 +5,7 @@
     llog = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=iso
     changelog = log --pretty=format:'%Cgreen%d %Creset%s' --date=iso
     ls = log --pretty=format:'%C(yellow)%p..%h %C(white dim)%cd %<|(49,trunc)%an %C(reset)%s' --date=short --abbrev=8 --no-merges
+    gitk = log --oneline --graph --decorate
 
     #wish i knew
     whois = "!sh -c 'git log -i -1 --pretty=\"format::%an <%ae>\n\" --author=\"$1\"' -"
@@ -89,6 +90,7 @@
     br = branch
 
     save = !git add -A && git commit -m 'SAVEPOINT'
+    dad = !curl https://icanhazdadjoke.com/ && git add
 
 [help]
     autocorrect = 1
@@ -99,7 +101,9 @@
 	editor = /usr/bin/vim
 [user]
 	name = Marcin Cylke
-	email = marcin.cylke+github@gmail.com
+	email = marcin.cylke@allegro.pl
 
 [commit]
     template = ~/.git_commit_msg.txt
+[status]
+	submoduleSummary = true
