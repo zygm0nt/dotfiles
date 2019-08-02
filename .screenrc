@@ -105,19 +105,11 @@ defnonblock 5
 # screen -t mail 8 mutt
 # screen -t daemon 9 tail -f /var/log/daemon.log
 
-screen -t htop htop
-screen -t acpi watch acpi -V
-screen -t xbattbar xbattbar -c right
-screen -t mocp mocp
-screen -t iotop iotop
-screen  /home/mcl/setlayout 0 4 2 0
-screen  tint2
-screen  volumeicon
-screen workrave
-screen gkrellm
-
 
 hardstatus alwayslastline
 hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r} (%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
+caption splitonly "%?%F%{= R}%:%{= g}%?[%n %t]"
 
+source .screen_layout
+layout save def
 # vim: syntax=screen

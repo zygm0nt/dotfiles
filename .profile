@@ -42,3 +42,5 @@ export LC_COLLATE="en_GB.UTF-8"
 #	trap "kill $SSH_AGENT_PID" 0
 #fi
 
+
+export PATH="$HOME/.cargo/bin:$PATH"

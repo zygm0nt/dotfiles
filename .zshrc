@@ -4,6 +4,11 @@ HISTSIZE=1000
 SAVEHIST=1000
 setopt appendhistory nomatch
 setopt BRACE_CCL    # expand braces {a-e}
+#To save every command before it is executed (this is different from bash's history -a solution):
+setopt inc_append_history
+
+#To retrieve the history file everytime history is called upon.
+setopt share_history
 
 bindkey -e
 # End of lines configured by zsh-newuser-install
@@ -23,8 +28,7 @@ source ~/.zsh/git-prompt/zshrc.sh
 # an example prompt
 PROMPT='%B%m%~%b$(git_super_status) %# '
 
-alias ls='ls -F --color=auto'
-alias jpsx='sh ~/bin/jpsx.sh'
+alias ls='ls -F -G'
 
 fpath=(/home/mcl/.zsh/zsh-completions/src $fpath)
 
@@ -46,3 +50,11 @@ fortune -s | cowsay -n
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
 [[ -s "/home/mcl/.gvm/bin/gvm-init.sh" ]] && source "/home/mcl/.gvm/bin/gvm-init.sh"
+
+if which jenv > /dev/null; then eval "$(jenv init -)"; fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/marcin.cylke/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/marcin.cylke/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/marcin.cylke/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/marcin.cylke/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
