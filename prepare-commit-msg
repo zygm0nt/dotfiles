@@ -1,15 +1,64 @@
 #!/bin/bash
-ORIG_MSG_FILE="$1"
-TEMP=`mktemp /tmp/git-XXXXX`
+#
+# An example hook script to verify what is about to be committed.
+# Called by "git commit" with no arguments.  The hook should
+# exit with non-zero status after issuing an appropriate message if
+# it wants to stop the commit.
+#
+# To enable this hook, rename this file to "pre-commit".
 
-TICKETNO=`git branch | grep '^\*' | cut -b3- | cut -d/ -f2 | cut -d- -f1,2`
-TITLE=`git log -1 --pretty=%B | head -1`
+GO_JIRA=~/go/bin/jira
+FZF=fzf
+export JIRA_PROJECT=GKN
 
-if [[ "$TITLE" =~ ^$TICKETNO.* ]]; then
-    MSG="$TITLE\n"
-else
-   MSG="$TICKETNO : \n" 
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
+
+
+if [ ! -e $GO_JIRA ]; then 
+    exit
 fi
 
-(echo "$MSG"; cat "$ORIG_MSG_FILE") > "$TEMP"
-cat "$TEMP" > "$ORIG_MSG_FILE"
+if [ ! command -v $FZF ]; then
+    exit
+fi
+
+trim() {
+    local var="$*"
+    # remove leading whitespace characters
+    var="${var#"${var%%[![:space:]]*}"}"
+    # remove trailing whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"
+    printf '%s' "$var"
+}
+
+COMMIT_TYPE=`cat <<EOF
+   Add = Create a capability e.g. feature, test, dependency.
+   Drop = Delete a capability e.g. feature, test, dependency.
+   Fix = Fix an issue e.g. bug, typo, accident, misstatement.
+   Bump = Increase the version of something e.g. a dependency.
+   Make = Change the build process, or tools, or infrastructure.
+   Start = Begin doing something; e.g. enable a toggle, feature flag, etc.
+   Stop = End doing something; e.g. disable a toggle, feature flag, etc.
+   Optimize = A change that MUST be just about performance, e.g. speed up code.
+   Document = A change that MUST be only in the documentation, e.g. help files.
+   Refactor = A change that MUST be just refactoring.
+   Reformat = A change that MUST be just format, e.g. indent line, trim space, etc.
+   Rephrase = A change that MUST be just textual, e.g. edit a comment, doc, etc.
+EOF`
+
+current_tasks=`$GO_JIRA list --template list --query "resolution = unresolved and assignee=currentuser() and project = $JIRA_PROJECT ORDER BY priority asc, created"`
+current_tasks=`cat <<EOF
+$current_tasks
+GKN-666:     Generic task
+EOF`
+
+TICKET_NUM=`echo "$current_tasks" | $FZF |awk -F: '{print $1 }'`
+CHOSEN_COMMIT_TYPE=`echo "$COMMIT_TYPE" | $FZF | awk -F= '{ print $1 }'`
+
+CURRENT_COMMIT_MSG=`cat $COMMIT_MSG_FILE`
+
+$GO_JIRA login
+
+echo "$TICKET_NUM | `trim $CHOSEN_COMMIT_TYPE` | $CURRENT_COMMIT_MSG"  > $COMMIT_MSG_FILE

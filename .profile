@@ -43,4 +43,4 @@ export LC_COLLATE="en_GB.UTF-8"
 #fi
 
 
-export PATH="$HOME/.cargo/bin:$PATH"
+source "$HOME/.cargo/env"

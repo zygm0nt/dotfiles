@@ -1,60 +1,77 @@
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-setopt appendhistory nomatch
-setopt BRACE_CCL    # expand braces {a-e}
-#To save every command before it is executed (this is different from bash's history -a solution):
-setopt inc_append_history
+source ~/.zsh/antigen.zsh
 
-#To retrieve the history file everytime history is called upon.
-setopt share_history
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
 
-bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/mcl/.zshrc'
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle git
+antigen bundle heroku
+antigen bundle pip
+antigen bundle lein
+antigen bundle command-not-found
 
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
+# Syntax highlighting bundle.
+antigen bundle zsh-users/zsh-syntax-highlighting
 
-autoload edit-command-line
-zle -N edit-command-line
-bindkey '^Xe' edit-command-line
+# Load the theme.
+antigen theme robbyrussell
 
-source ~/.zsh/git-prompt/zshrc.sh
+# Tell Antigen that you're done.
+antigen apply
 
-# an example prompt
-PROMPT='%B%m%~%b$(git_super_status) %# '
 
-alias ls='ls -F -G'
+function activate-venv() {
+  local selected_env
+  selected_env=$(ls ~/VirtualEnvs/ | fzf)
 
-fpath=(/home/mcl/.zsh/zsh-completions/src $fpath)
+  if [ -n "$selected_env" ]; then
+    source "$HOME/VirtualEnvs/$selected_env/bin/activate"
+  fi
+}
 
-LESS=-FRX ; export LESS
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
+function delete-branches() {
+  local branches_to_delete
+  branches_to_delete=$(git branch | fzf --multi)
 
-case $TERM in
-        xterm*)
-             precmd () {print -Pn "\e]0;%n@%m: %~\a"}
-             ;;
-esac
+  if [ -n "$branches_to_delete" ]; then
+    git branch --delete --force $branches_to_delete
+  fi
+}
 
-export PATH=$PATH:~/tools/apache-maven-3.1.0/bin:~/tools/gradle-1.6/bin:~/tools
 
-echo "" ; echo ""
-fortune -s | cowsay -n
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/shims:$PATH"
 
-#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-[[ -s "/home/mcl/.gvm/bin/gvm-init.sh" ]] && source "/home/mcl/.gvm/bin/gvm-init.sh"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 
-if which jenv > /dev/null; then eval "$(jenv init -)"; fi
+[ -f ~/git-commit-message-prefix-hook/hook/init.sh ] && . ~/git-commit-message-prefix-hook/hook/init.sh
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/marcin.cylke/.sdkman"
+[[ -s "/Users/marcin.cylke/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/marcin.cylke/.sdkman/bin/sdkman-init.sh"
+
+
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/marcin.cylke/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/marcin.cylke/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/marcin.cylke/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/marcin.cylke/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+function ver {
+    pip show $1 | grep Version | awk -F: '{ print $2 }'
+}
+
+function pq-sample {
+    python -c "import pandas as pd; print(pd.read_parquet(\"$1\").head())"
+}
+
+

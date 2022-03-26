@@ -99,15 +99,17 @@
 [push]
 	default = current
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/marcin.cylke/.gitignore_global
 	editor = /usr/bin/vim
-	pager = diff-so-fancy | less --tabs=4 -RFX
+    #pager = diff-so-fancy | less --tabs=4 -RFX
 [user]
 	name = Marcin Cylke
+    #email = marcin.cylke+github@gmail.com
 	email = marcin.cylke@allegro.pl
 
 [commit]
-    template = ~/.git_commit_msg.txt
+	template = /Users/marcin.cylke/.gitmessage
+    #template = ~/.git_commit_msg.txt
 [status]
 	submoduleSummary = true
 [color]
@@ -124,3 +126,14 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Users/marcin.cylke/Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
